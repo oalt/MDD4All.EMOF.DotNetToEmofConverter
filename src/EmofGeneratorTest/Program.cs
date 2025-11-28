@@ -1,4 +1,6 @@
-﻿using MDD4All.EMOF.DataModels;
+﻿using CycloneDX.Models;
+using KMRD.FunctionModules.DataModels;
+using MDD4All.EMOF.DataModels;
 using MDD4All.EMOF.DotNetToEmofConverter;
 using MDD4All.Person.DataModels;
 using Newtonsoft.Json;
@@ -11,7 +13,10 @@ namespace EmofGeneratorTest
         {
             DotNetToEmofConverter dotNetToEmofConverter = new DotNetToEmofConverter();
 
-            EmofRepository emofRepository = dotNetToEmofConverter.ConvertToEMOF(typeof(Repository));
+            Type type = typeof(Bom);
+
+
+            EmofRepository emofRepository = dotNetToEmofConverter.ConvertToEMOF(type);
 
             JsonSerializerSettings serializerSettings = new JsonSerializerSettings();
 
@@ -23,7 +28,9 @@ namespace EmofGeneratorTest
                                                           TypeNameHandling = TypeNameHandling.Auto
                                                       });
 
-            File.WriteAllText("..\\..\\..\\emofModel.json", json);
+            string filename = type.FullName;
+
+            File.WriteAllText("..\\..\\..\\" + filename + ".emof.json", json);
         }
     }
 }

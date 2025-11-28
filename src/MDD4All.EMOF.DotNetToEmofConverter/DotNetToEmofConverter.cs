@@ -30,7 +30,13 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
         {
             PackageableElement? result = null;
 
-            Package? package = GetOrCreatePackageForNamespace(type.Namespace, repository);
+            string? namespaceTitle = type.Namespace;
+            if(namespaceTitle == null)
+            {
+                namespaceTitle = "";
+            }
+
+            Package? package = GetOrCreatePackageForNamespace(namespaceTitle, repository);
 
             if (package != null)
             {

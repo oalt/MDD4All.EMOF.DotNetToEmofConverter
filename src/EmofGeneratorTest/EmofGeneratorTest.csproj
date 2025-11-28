@@ -8,8 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MDD4All.EMOF.DotNetToEmofConverter\MDD4All.EMOF.DotNetToEmofConverter.csproj" />
-    <ProjectReference Include="..\MDD4All.Person.DataModels\MDD4All.Person.DataModels.csproj" />
+    <ProjectReference Include="..\..\..\..\..\cyclonedx-dotnet-library\src\CycloneDX.Core\CycloneDX.Core.csproj" />
+    <ProjectReference Include="..\..\..\KMRD.FunctionModules.DataModels\src\KMRD.FunctionModules.DataModels\KMRD.FunctionModules.DataModels-dev.csproj" />
+    <ProjectReference Include="..\..\..\MDD4All.Person.DataModels\MDD4All.Person.DataModels.csproj" />
+    <ProjectReference Include="..\MDD4All.EMOF.DotNetToEmofConverter\MDD4All.EMOF.DotNetToEmofConverter-dev.csproj" />
   </ItemGroup>
 
 </Project>
