@@ -236,6 +236,8 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
 
             foreach (PropertyInfo propertyInfo in propertyInfos)
             {
+                
+
                 Type typeOfProperty = propertyInfo.PropertyType;
 
                 Type typeForMof = typeOfProperty;
@@ -281,6 +283,7 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
                     property.CollectionTypeRef = genericCollectionType.FullName;
                 }
 
+                AddPropertyAnnotations(propertyInfo, property, repository);
 
                 if (type.IsClass && packageableElement != null)
                 {
@@ -295,7 +298,68 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
             }
         }
 
+        private void AddPropertyAnnotations(PropertyInfo propertyInfo, Property property, EmofRepository repository)
+        {
+            IEnumerable<Attribute> customAttributes = propertyInfo.GetCustomAttributes();
+            
+            //IList<CustomAttributeData> attributeDatas = CustomAttributeData.GetCustomAttributes(propertyInfo);
 
+            //foreach(CustomAttributeData customAttributeData in attributeDatas)
+            //{
+            //    IList<CustomAttributeTypedArgument> constructorArguments = customAttributeData.ConstructorArguments;
+            //    var namedArgument = customAttributeData.NamedArguments;
+
+            //    ConstructorInfo constructor = customAttributeData.Constructor;
+            //    ParameterInfo[] parameterInfos = constructor.GetParameters();
+            //}
+
+
+            foreach(Attribute attribute in customAttributes)
+            {
+                Type attributeType = attribute.GetType();
+
+                PackageableElement? attributeTypeElement = GetOrCreateElementRecursively(attributeType, repository);
+
+                if(attributeTypeElement != null)
+                {
+                    InstanceSpecification annotationInstance = new InstanceSpecification();
+                    annotationInstance.ClassifierRef = attributeType.FullName;
+
+                    PropertyInfo[] propertyInfos = attributeType.GetProperties(BindingFlags.DeclaredOnly |
+                                                                               BindingFlags.Instance |
+                                                                               BindingFlags.Public);
+
+                    foreach(PropertyInfo attributePropertyInfo in propertyInfos)
+                    {
+                        object? value = attributePropertyInfo.GetValue(attribute);
+
+                        if (value != null)
+                        {
+                            Slot slot = new Slot
+                            {
+                                DefiningFeatureRef = attributePropertyInfo.Name
+                            };
+
+                            slot.Value = value.ToString();
+
+                            if (annotationInstance.Slots == null)
+                            {
+                                annotationInstance.Slots = new List<Slot>();
+                            }
+                            annotationInstance.Slots.Add(slot);
+                        }
+
+                        
+                    }
+
+                    if(property.Annotations == null)
+                    {
+                        property.Annotations = new List<InstanceSpecification>();
+                    }
+                    property.Annotations.Add(annotationInstance);
+                }
+            }
+        }
 
         private Package? GetOrCreatePackageForNamespace(string namespaceName, EmofRepository repository)
         {

@@ -5,6 +5,8 @@
         <Nullable>enable</Nullable>
         <LangVersion>10</LangVersion>
         <WarningsAsErrors>Nullable</WarningsAsErrors>
+        <RootNamespace>$(MSBuildProjectName.Replace("-dev", ""))</RootNamespace>
+        <AssemblyName>$(MSBuildProjectName.Replace("-dev", ""))</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>
