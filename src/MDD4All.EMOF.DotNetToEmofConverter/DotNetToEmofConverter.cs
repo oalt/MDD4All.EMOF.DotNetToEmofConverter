@@ -1,4 +1,5 @@
-﻿using MDD4All.EMOF.DataModels;
+﻿using MDD4All.DataModeling.Attributes;
+using MDD4All.EMOF.DataModels;
 using MDD4All.EMOF.DataModels.Base;
 using MDD4All.EMOF.DataModels.Enumerations;
 using MDD4All.EMOF.DataModels.Templates;
@@ -68,6 +69,9 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
                             OwningPackage = package,
                             IsAbstract = type.IsAbstract
                         };
+
+                        package.PackagedElements.Add(packageableElement);
+
                         if (isTemplate)
                         {
                             ((Class)packageableElement).OwnedTemplateSignature = new TemplateSignature();
@@ -107,9 +111,9 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
                         }
 
 
-                        package.PackagedElements.Add(packageableElement);
+                        
 
-                        AddProperties(packageableElement, type, repository);
+                        AddProperties(package, packageableElement, type, repository);
 
                     }
                     else if (type.IsInterface)
@@ -119,6 +123,8 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
                             Name = name,
                             OwningPackage = package
                         };
+
+                        package.PackagedElements.Add(packageableElement);
 
                         if (isTemplate)
                         {
@@ -132,12 +138,12 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
 
                             if (baseTypeElement != null)
                             {
-                                if (((Interface)packageableElement).RedefinedInterfacesRef == null)
+                                if (((Interface)packageableElement).RedefinedInterfacesRefs == null)
                                 {
-                                    ((Interface)packageableElement).RedefinedInterfacesRef = new List<string>();
+                                    ((Interface)packageableElement).RedefinedInterfacesRefs = new List<string>();
                                 }
 
-                                ((Interface)packageableElement).RedefinedInterfacesRef!.Add(baseTypeElement.FullName);
+                                ((Interface)packageableElement).RedefinedInterfacesRefs!.Add(baseTypeElement.FullName);
                             }
                         }
 
@@ -149,18 +155,18 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
 
                             if (baseTypeElement != null)
                             {
-                                if (((Interface)packageableElement).RedefinedInterfacesRef == null)
+                                if (((Interface)packageableElement).RedefinedInterfacesRefs == null)
                                 {
-                                    ((Interface)packageableElement).RedefinedInterfacesRef = new List<string>();
+                                    ((Interface)packageableElement).RedefinedInterfacesRefs = new List<string>();
                                 }
 
-                                ((Interface)packageableElement).RedefinedInterfacesRef!.Add(baseTypeElement.FullName);
+                                ((Interface)packageableElement).RedefinedInterfacesRefs!.Add(baseTypeElement.FullName);
                             }
                         }
 
-                        package.PackagedElements.Add(packageableElement);
+                        
 
-                        AddProperties(packageableElement, type, repository);
+                        AddProperties(package, packageableElement, type, repository);
                     }
                     else if (type.IsEnum)
                     {
@@ -228,7 +234,10 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
 
         }
 
-        private void AddProperties(PackageableElement packageableElement, Type type, EmofRepository repository)
+        private void AddProperties(Package package, 
+                                   PackageableElement packageableElement, 
+                                   Type type, 
+                                   EmofRepository repository)
         {
             PropertyInfo[] propertyInfos = type.GetProperties(BindingFlags.DeclaredOnly |
                                                               BindingFlags.Instance |
@@ -236,11 +245,19 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
 
             foreach (PropertyInfo propertyInfo in propertyInfos)
             {
-                
+                bool isTypeReference = false;
 
                 Type typeOfProperty = propertyInfo.PropertyType;
 
                 Type typeForMof = typeOfProperty;
+
+                TypeReferenceToAttribute[] typeReferenceToAttributes = (TypeReferenceToAttribute[])Attribute.GetCustomAttributes(propertyInfo, 
+                                                                                                                           typeof(TypeReferenceToAttribute)
+                                                                                                                           );
+                if (typeReferenceToAttributes.Length == 1)
+                {
+                    isTypeReference = true;
+                }
 
                 string multiplicity = "1";
 
@@ -285,15 +302,47 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
 
                 AddPropertyAnnotations(propertyInfo, property, repository);
 
-                if (type.IsClass && packageableElement != null)
+                if (!isTypeReference)
                 {
-                    Class emofClass = (Class)packageableElement;
-                    emofClass.OwnedAttributes.Add(property);
+                    if (type.IsClass && packageableElement != null)
+                    {
+                        Class emofClass = (Class)packageableElement;
+                        emofClass.OwnedAttributes.Add(property);
+                    }
+                    else if (type.IsInterface && packageableElement != null)
+                    {
+                        Interface emofInterface = (Interface)packageableElement;
+                        emofInterface.OwnedAttributes.Add(property);
+                    }
                 }
-                else if (type.IsInterface && packageableElement != null)
+                else // create association
                 {
-                    Interface emofInterface = (Interface)packageableElement;
-                    emofInterface.OwnedAttributes.Add(property);
+
+                    Type referencedType = typeReferenceToAttributes[0].Type;
+
+                    if (packageableElement != null)
+                    {
+                        Association association = new Association()
+                        {
+                            OwningPackage = package,
+                            Name = propertyInfo.Name
+                        };
+
+                        Property assocationSource = new Property()
+                        {
+                            TypeRef = packageableElement.FullName,
+                            Name = string.Empty,
+                            Multiplicity = "1"
+                        };
+
+                        association.OwnedEnds.Add(assocationSource);
+
+                        property.TypeRef = referencedType.FullName;
+
+                        association.OwnedEnds.Add(property);
+
+                        package.PackagedElements.Add(association);
+                    }
                 }
             }
         }
@@ -318,45 +367,49 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
             {
                 Type attributeType = attribute.GetType();
 
-                PackageableElement? attributeTypeElement = GetOrCreateElementRecursively(attributeType, repository);
-
-                if(attributeTypeElement != null)
+                if (attributeType.Namespace != "MDD4All.DataModeling.Attributes")
                 {
-                    InstanceSpecification annotationInstance = new InstanceSpecification();
-                    annotationInstance.ClassifierRef = attributeType.FullName;
 
-                    PropertyInfo[] propertyInfos = attributeType.GetProperties(BindingFlags.DeclaredOnly |
-                                                                               BindingFlags.Instance |
-                                                                               BindingFlags.Public);
+                    PackageableElement? attributeTypeElement = GetOrCreateElementRecursively(attributeType, repository);
 
-                    foreach(PropertyInfo attributePropertyInfo in propertyInfos)
+                    if (attributeTypeElement != null)
                     {
-                        object? value = attributePropertyInfo.GetValue(attribute);
+                        InstanceSpecification annotationInstance = new InstanceSpecification();
+                        annotationInstance.ClassifierRef = attributeType.FullName;
 
-                        if (value != null)
+                        PropertyInfo[] propertyInfos = attributeType.GetProperties(BindingFlags.DeclaredOnly |
+                                                                                   BindingFlags.Instance |
+                                                                                   BindingFlags.Public);
+
+                        foreach (PropertyInfo attributePropertyInfo in propertyInfos)
                         {
-                            Slot slot = new Slot
-                            {
-                                DefiningFeatureRef = attributePropertyInfo.Name
-                            };
+                            object? value = attributePropertyInfo.GetValue(attribute);
 
-                            slot.Value = value.ToString();
-
-                            if (annotationInstance.Slots == null)
+                            if (value != null)
                             {
-                                annotationInstance.Slots = new List<Slot>();
+                                Slot slot = new Slot
+                                {
+                                    DefiningFeatureRef = attributePropertyInfo.Name
+                                };
+
+                                slot.Value = value.ToString();
+
+                                if (annotationInstance.Slots == null)
+                                {
+                                    annotationInstance.Slots = new List<Slot>();
+                                }
+                                annotationInstance.Slots.Add(slot);
                             }
-                            annotationInstance.Slots.Add(slot);
+
+
                         }
 
-                        
+                        if (property.Annotations == null)
+                        {
+                            property.Annotations = new List<InstanceSpecification>();
+                        }
+                        property.Annotations.Add(annotationInstance);
                     }
-
-                    if(property.Annotations == null)
-                    {
-                        property.Annotations = new List<InstanceSpecification>();
-                    }
-                    property.Annotations.Add(annotationInstance);
                 }
             }
         }
