@@ -29,6 +29,8 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
 
         private PackageableElement? GetOrCreateElementRecursively(Type type, EmofRepository repository)
         {
+            string version = type.Assembly.GetName().Version.ToString();
+
             PackageableElement? result = null;
 
             string? namespaceTitle = type.Namespace;
@@ -50,7 +52,7 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
                     isTemplate = true;
                 }
 
-                PackageableElement? packageableElement = package.PackagedElements.FirstOrDefault(element => element.Name == name);
+                PackageableElement? packageableElement = package.PackagedElements.FirstOrDefault(element => element.Name == name && element.Version == version);
 
                 VisibilityKind visibility = VisibilityKind.Private;
 
@@ -59,7 +61,7 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
                     ;
                 }
 
-                if (packageableElement == null)
+                if (packageableElement == null) // create a new element
                 {
                     if (type.IsClass || (type.IsValueType && !type.IsEnum))
                     {
@@ -67,7 +69,8 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
                         {
                             Name = name,
                             OwningPackage = package,
-                            IsAbstract = type.IsAbstract
+                            IsAbstract = type.IsAbstract,
+                            Version = version
                         };
 
                         package.PackagedElements.Add(packageableElement);
@@ -121,7 +124,8 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
                         packageableElement = new Interface
                         {
                             Name = name,
-                            OwningPackage = package
+                            OwningPackage = package,
+                            Version = version
                         };
 
                         package.PackagedElements.Add(packageableElement);
@@ -174,7 +178,7 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
                         {
                             Name = type.Name,
                             OwningPackage = package,
-
+                            Version = version
                         };
 
                         package.PackagedElements.Add(packageableElement);
