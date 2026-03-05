@@ -243,19 +243,36 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
                                    Type type, 
                                    EmofRepository repository)
         {
+            FieldInfo[] fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public);
+
+
             PropertyInfo[] propertyInfos = type.GetProperties(BindingFlags.DeclaredOnly |
                                                               BindingFlags.Instance |
                                                               BindingFlags.Public);
 
-            foreach (PropertyInfo propertyInfo in propertyInfos)
+            List<MemberInfo> members = new List<MemberInfo>();
+
+            members.AddRange(fields);
+            members.AddRange(propertyInfos);
+
+            foreach (MemberInfo memberInfo in members)
             {
                 bool isTypeReference = false;
 
-                Type typeOfProperty = propertyInfo.PropertyType;
+                Type? typeOfMember = null;
 
-                Type typeForMof = typeOfProperty;
+                if (memberInfo is PropertyInfo)
+                {
+                    typeOfMember = ((PropertyInfo)memberInfo).PropertyType;
+                }
+                else if (memberInfo is FieldInfo)
+                {
+                    typeOfMember = ((FieldInfo)memberInfo).FieldType;
+                }
 
-                TypeReferenceToAttribute[] typeReferenceToAttributes = (TypeReferenceToAttribute[])Attribute.GetCustomAttributes(propertyInfo, 
+                Type typeForMof = typeOfMember!;
+
+                TypeReferenceToAttribute[] typeReferenceToAttributes = (TypeReferenceToAttribute[])Attribute.GetCustomAttributes(memberInfo, 
                                                                                                                            typeof(TypeReferenceToAttribute)
                                                                                                                            );
                 if (typeReferenceToAttributes.Length == 1)
@@ -267,18 +284,19 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
 
                 PackageableElement? genericCollectionType = null;
 
-                if (typeOfProperty.Name.StartsWith("List") ||
-                    typeOfProperty.Name.StartsWith("ObservableCollection") ||
-                    typeOfProperty.Name.StartsWith("Dictionary") || typeOfProperty.IsArray ||
-                   propertyInfo.GetIndexParameters().Length > 0)
+                if (typeOfMember!.Name.StartsWith("List") ||
+                    typeOfMember.Name.StartsWith("ObservableCollection") ||
+                    typeOfMember.Name.StartsWith("Dictionary") || 
+                    typeOfMember.IsArray /* ||
+                    memberInfo.GetIndexParameters().Length > 0*/)
                 {
                     multiplicity = "*";
 
-                    if (typeOfProperty.Name.StartsWith("List"))
+                    if (typeOfMember.Name.StartsWith("List"))
                     {
-                        typeForMof = typeOfProperty.GetGenericArguments()[0];
+                        typeForMof = typeOfMember.GetGenericArguments()[0];
 
-                        genericCollectionType = GetOrCreateElementRecursively(typeOfProperty, repository);
+                        genericCollectionType = GetOrCreateElementRecursively(typeOfMember, repository);
                     }
                 }
 
@@ -293,18 +311,28 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
 
                 Property property = new Property()
                 {
-                    Name = propertyInfo.Name,
+                    Name = memberInfo.Name,
                     TypeRef = propertyTypeRef,
-                    Kind = PropertyKind.Property,
-                    IsReadOnly = !propertyInfo.CanWrite,
                     Multiplicity = multiplicity
                 };
+
+                if (memberInfo is PropertyInfo)
+                {
+                    property.Kind = PropertyKind.Property;
+                    property.IsReadOnly = !((PropertyInfo)memberInfo).CanWrite;
+                }
+                else if(memberInfo is FieldInfo)
+                {
+                    property.Kind = PropertyKind.Field;
+                    property.IsReadOnly = false;
+                }
+
                 if (genericCollectionType != null)
                 {
                     property.CollectionTypeRef = genericCollectionType.FullName;
                 }
 
-                AddPropertyAnnotations(propertyInfo, property, repository);
+                AddPropertyAnnotations(memberInfo, property, repository);
 
                 if (!isTypeReference)
                 {
@@ -329,7 +357,7 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
                         Association association = new Association()
                         {
                             OwningPackage = package,
-                            Name = propertyInfo.Name
+                            Name = memberInfo.Name
                         };
 
                         Property assocationSource = new Property()
@@ -351,7 +379,7 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
             }
         }
 
-        private void AddPropertyAnnotations(PropertyInfo propertyInfo, Property property, EmofRepository repository)
+        private void AddPropertyAnnotations(MemberInfo propertyInfo, Property property, EmofRepository repository)
         {
             IEnumerable<Attribute> customAttributes = propertyInfo.GetCustomAttributes();
             
