@@ -89,10 +89,14 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
                             {
                                 if (((Class)packageableElement).SuperClassRefs == null)
                                 {
-                                    ((Class)packageableElement).SuperClassRefs = new List<string>();
+                                    ((Class)packageableElement).SuperClassRefs = new List<TypeReference>();
                                 }
 
-                                ((Class)packageableElement).SuperClassRefs!.Add(baseTypeElement.FullName);
+                                ((Class)packageableElement).SuperClassRefs!.Add(new TypeReference
+                                {
+                                    FullName = baseTypeElement.FullName,
+                                    Version = baseTypeElement.Version
+                                });
                             }
                         }
 
@@ -106,10 +110,14 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
                             {
                                 if (((Class)packageableElement).SuperClassRefs == null)
                                 {
-                                    ((Class)packageableElement).SuperClassRefs = new List<string>();
+                                    ((Class)packageableElement).SuperClassRefs = new List<TypeReference>();
                                 }
 
-                                ((Class)packageableElement).SuperClassRefs!.Add(baseTypeElement.FullName);
+                                ((Class)packageableElement).SuperClassRefs!.Add(new TypeReference
+                                {
+                                    FullName = baseTypeElement.FullName,
+                                    Version = baseTypeElement.Version
+                                });
                             }
                         }
 
@@ -144,10 +152,16 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
                             {
                                 if (((Interface)packageableElement).RedefinedInterfacesRefs == null)
                                 {
-                                    ((Interface)packageableElement).RedefinedInterfacesRefs = new List<string>();
+                                    ((Interface)packageableElement).RedefinedInterfacesRefs = new List<TypeReference>();
                                 }
 
-                                ((Interface)packageableElement).RedefinedInterfacesRefs!.Add(baseTypeElement.FullName);
+                                TypeReference baseTypeReference = new TypeReference
+                                {
+                                    FullName = baseTypeElement.FullName,
+                                    Version = baseTypeElement.Version
+                                };
+
+                                ((Interface)packageableElement).RedefinedInterfacesRefs!.Add(baseTypeReference);
                             }
                         }
 
@@ -161,10 +175,16 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
                             {
                                 if (((Interface)packageableElement).RedefinedInterfacesRefs == null)
                                 {
-                                    ((Interface)packageableElement).RedefinedInterfacesRefs = new List<string>();
+                                    ((Interface)packageableElement).RedefinedInterfacesRefs = new List<TypeReference>();
                                 }
 
-                                ((Interface)packageableElement).RedefinedInterfacesRefs!.Add(baseTypeElement.FullName);
+                                TypeReference baseTypeReference = new TypeReference
+                                {
+                                    FullName = baseTypeElement.FullName,
+                                    Version = baseTypeElement.Version
+                                };
+
+                                ((Interface)packageableElement).RedefinedInterfacesRefs!.Add(baseTypeReference);
                             }
                         }
 
@@ -302,11 +322,15 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
 
                 PackageableElement? propertyTypeElement = GetOrCreateElementRecursively(typeForMof, repository);
 
-                string propertyTypeRef = "";
+                TypeReference propertyTypeRef = new TypeReference();
 
                 if (propertyTypeElement != null)
                 {
-                    propertyTypeRef = propertyTypeElement.FullName;
+                    propertyTypeRef = new TypeReference
+                    {
+                        FullName = propertyTypeElement.FullName,
+                        Version = propertyTypeElement.Version
+                    };
                 }
 
                 Property property = new Property()
@@ -329,7 +353,11 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
 
                 if (genericCollectionType != null)
                 {
-                    property.CollectionTypeRef = genericCollectionType.FullName;
+                    property.CollectionTypeRef = new TypeReference
+                    {
+                        FullName = genericCollectionType.FullName,
+                        Version = genericCollectionType.Version
+                    };
                 }
 
                 AddPropertyAnnotations(memberInfo, property, repository);
@@ -362,14 +390,22 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
 
                         Property assocationSource = new Property()
                         {
-                            TypeRef = packageableElement.FullName,
+                            TypeRef = new TypeReference
+                            {
+                                FullName = packageableElement.FullName,
+                                Version = packageableElement.Version
+                            },
                             Name = string.Empty,
                             Multiplicity = "1"
                         };
 
                         association.OwnedEnds.Add(assocationSource);
 
-                        property.TypeRef = referencedType.FullName;
+                        property.TypeRef = new TypeReference
+                        {
+                            FullName = referencedType.FullName,
+                            Version = referencedType.Assembly.GetName().Version.ToString()
+                        };
 
                         association.OwnedEnds.Add(property);
 
@@ -407,7 +443,11 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
                     if (attributeTypeElement != null)
                     {
                         InstanceSpecification annotationInstance = new InstanceSpecification();
-                        annotationInstance.ClassifierRef = attributeType.FullName;
+                        annotationInstance.ClassifierRef = new TypeReference
+                        {
+                            FullName = attributeType.FullName,
+                            Version = attributeType.Assembly.GetName().Version.ToString()
+                        };
 
                         PropertyInfo[] propertyInfos = attributeType.GetProperties(BindingFlags.DeclaredOnly |
                                                                                    BindingFlags.Instance |
