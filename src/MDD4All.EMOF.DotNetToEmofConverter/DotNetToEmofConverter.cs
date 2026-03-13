@@ -279,6 +279,8 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
             {
                 bool isTypeReference = false;
 
+                bool isNullable = false;
+
                 Type? typeOfMember = null;
 
                 if (memberInfo is PropertyInfo)
@@ -288,6 +290,18 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
                 else if (memberInfo is FieldInfo)
                 {
                     typeOfMember = ((FieldInfo)memberInfo).FieldType;
+                }
+
+                if(memberInfo.Name == "Timestamp")
+                {
+                    ;
+                }
+
+
+                if (typeOfMember != null && typeOfMember.FullName.StartsWith("System.Nullable"))
+                {
+                    typeOfMember = Nullable.GetUnderlyingType(typeOfMember);
+                    isNullable = true;
                 }
 
                 Type typeForMof = typeOfMember!;
@@ -337,7 +351,8 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
                 {
                     Name = memberInfo.Name,
                     TypeRef = propertyTypeRef,
-                    Multiplicity = multiplicity
+                    Multiplicity = multiplicity,
+                    IsNullable = isNullable
                 };
 
                 if (memberInfo is PropertyInfo)
