@@ -2,6 +2,7 @@
 using MDD4All.EMOF.DataModels;
 using MDD4All.EMOF.DataModels.Base;
 using MDD4All.EMOF.DataModels.Enumerations;
+using MDD4All.EMOF.DataModels.Extensions;
 using MDD4All.EMOF.DataModels.Templates;
 using System;
 using System.Collections.Generic;
@@ -65,13 +66,26 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
                 {
                     if (type.IsClass || (type.IsValueType && !type.IsEnum))
                     {
-                        packageableElement = new Class()
+                        if (type.IsClass)
                         {
-                            Name = name,
-                            OwningPackage = package,
-                            IsAbstract = type.IsAbstract,
-                            Version = version
-                        };
+                            packageableElement = new Class()
+                            {
+                                Name = name,
+                                OwningPackage = package,
+                                IsAbstract = type.IsAbstract,
+                                Version = version
+                            };
+                        }
+                        else
+                        {
+                            packageableElement = new Struct()
+                            {
+                                Name = name,
+                                OwningPackage = package,
+                                IsAbstract = type.IsAbstract,
+                                Version = version
+                            };
+                        }
 
                         package.PackagedElements.Add(packageableElement);
 
@@ -120,9 +134,6 @@ namespace MDD4All.EMOF.DotNetToEmofConverter
                                 });
                             }
                         }
-
-
-                        
 
                         AddProperties(package, packageableElement, type, repository);
 
