@@ -1,0 +1,569 @@
+﻿using MDD4All.DataModeling.Attributes;
+using MDD4All.EMOF.DataModels;
+using MDD4All.EMOF.DataModels.Base;
+using MDD4All.EMOF.DataModels.Enumerations;
+using MDD4All.EMOF.DataModels.Extensions;
+using MDD4All.EMOF.DataModels.Templates;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+
+namespace MDD4All.EMOF.DotNetToEmofConverter
+{
+    public class DotNetToEmofConverter
+    {
+
+        public EmofRepository ConvertToEMOF(Type type)
+        {
+            Type[] assemblyTypes = Assembly.GetAssembly(type).GetTypes();
+
+            EmofRepository result = new EmofRepository();
+
+            foreach (Type assemblyType in assemblyTypes)
+            {
+                GetOrCreateElementRecursively(assemblyType, result);
+            }
+
+            return result;
+        }
+
+        private PackageableElement? GetOrCreateElementRecursively(Type type, EmofRepository repository)
+        {
+            string version = type.Assembly.GetName().Version.ToString();
+
+            PackageableElement? result = null;
+
+            string? namespaceTitle = type.Namespace;
+            if(namespaceTitle == null)
+            {
+                namespaceTitle = "";
+            }
+
+            Package? package = GetOrCreatePackageForNamespace(namespaceTitle, repository);
+
+            if (package != null)
+            {
+                bool isTemplate = false;
+                string name = type.Name;
+                if (name.Contains("`")) // generic type
+                {
+                    string[] parts = name.Split('`');
+                    name = parts[0];
+                    isTemplate = true;
+                }
+
+                PackageableElement? packageableElement = package.PackagedElements.FirstOrDefault(element => element.Name == name && element.Version == version);
+
+                VisibilityKind visibility = VisibilityKind.Private;
+
+                if (name.ToLower().Contains("property"))
+                {
+                    ;
+                }
+
+                if (packageableElement == null) // create a new element
+                {
+                    if (type.IsClass || (type.IsValueType && !type.IsEnum))
+                    {
+                        if (type.IsClass)
+                        {
+                            packageableElement = new Class()
+                            {
+                                Name = name,
+                                OwningPackage = package,
+                                IsAbstract = type.IsAbstract,
+                                Version = version
+                            };
+                        }
+                        else
+                        {
+                            packageableElement = new Struct()
+                            {
+                                Name = name,
+                                OwningPackage = package,
+                                IsAbstract = type.IsAbstract,
+                                Version = version
+                            };
+                        }
+
+                        package.PackagedElements.Add(packageableElement);
+
+                        if (isTemplate)
+                        {
+                            ((Class)packageableElement).OwnedTemplateSignature = new TemplateSignature();
+                        }
+
+                        // inheritance
+                        if (type.BaseType != null)
+                        {
+                            PackageableElement? baseTypeElement = GetOrCreateElementRecursively(type.BaseType, repository);
+
+                            if (baseTypeElement != null)
+                            {
+                                if (((Class)packageableElement).SuperClassRefs == null)
+                                {
+                                    ((Class)packageableElement).SuperClassRefs = new List<TypeReference>();
+                                }
+
+                                ((Class)packageableElement).SuperClassRefs!.Add(new TypeReference
+                                {
+                                    FullName = baseTypeElement.FullName,
+                                    Version = baseTypeElement.Version
+                                });
+                            }
+                        }
+
+                        // implemented interfaces
+                        Type[] implementedInterfaceTypes = GetDirectInterfaces(type);
+                        foreach (Type implementedInterfaceType in implementedInterfaceTypes)
+                        {
+                            PackageableElement? baseTypeElement = GetOrCreateElementRecursively(implementedInterfaceType, repository);
+
+                            if (baseTypeElement != null)
+                            {
+                                if (((Class)packageableElement).SuperClassRefs == null)
+                                {
+                                    ((Class)packageableElement).SuperClassRefs = new List<TypeReference>();
+                                }
+
+                                ((Class)packageableElement).SuperClassRefs!.Add(new TypeReference
+                                {
+                                    FullName = baseTypeElement.FullName,
+                                    Version = baseTypeElement.Version
+                                });
+                            }
+                        }
+
+                        AddProperties(package, packageableElement, type, repository);
+
+                    }
+                    else if (type.IsInterface)
+                    {
+                        packageableElement = new Interface
+                        {
+                            Name = name,
+                            OwningPackage = package,
+                            Version = version
+                        };
+
+                        package.PackagedElements.Add(packageableElement);
+
+                        if (isTemplate)
+                        {
+                            SetTemplateSettings((Classifier)packageableElement, type, repository);
+                        }
+
+                        // inheritance
+                        if (type.BaseType != null)
+                        {
+                            PackageableElement? baseTypeElement = GetOrCreateElementRecursively(type.BaseType, repository);
+
+                            if (baseTypeElement != null)
+                            {
+                                if (((Interface)packageableElement).RedefinedInterfacesRefs == null)
+                                {
+                                    ((Interface)packageableElement).RedefinedInterfacesRefs = new List<TypeReference>();
+                                }
+
+                                TypeReference baseTypeReference = new TypeReference
+                                {
+                                    FullName = baseTypeElement.FullName,
+                                    Version = baseTypeElement.Version
+                                };
+
+                                ((Interface)packageableElement).RedefinedInterfacesRefs!.Add(baseTypeReference);
+                            }
+                        }
+
+                        // implemented interfaces
+                        Type[] implementedInterfaceTypes = GetDirectInterfaces(type);
+                        foreach (Type implementedInterfaceType in implementedInterfaceTypes)
+                        {
+                            PackageableElement? baseTypeElement = GetOrCreateElementRecursively(implementedInterfaceType, repository);
+
+                            if (baseTypeElement != null)
+                            {
+                                if (((Interface)packageableElement).RedefinedInterfacesRefs == null)
+                                {
+                                    ((Interface)packageableElement).RedefinedInterfacesRefs = new List<TypeReference>();
+                                }
+
+                                TypeReference baseTypeReference = new TypeReference
+                                {
+                                    FullName = baseTypeElement.FullName,
+                                    Version = baseTypeElement.Version
+                                };
+
+                                ((Interface)packageableElement).RedefinedInterfacesRefs!.Add(baseTypeReference);
+                            }
+                        }
+
+                        
+
+                        AddProperties(package, packageableElement, type, repository);
+                    }
+                    else if (type.IsEnum)
+                    {
+                        packageableElement = new Enumeration
+                        {
+                            Name = type.Name,
+                            OwningPackage = package,
+                            Version = version
+                        };
+
+                        package.PackagedElements.Add(packageableElement);
+
+                        Array enumValues = type.GetEnumValues();
+
+                        foreach (object? enumValue in enumValues)
+                        {
+                            ((Enumeration)packageableElement).OwnedLiterals.Add(new EnumerationLiteral
+                            {
+                                Name = enumValue.ToString(),
+                                OwningPackage = package
+                            });
+                        }
+                    }
+
+                }
+
+                result = packageableElement;
+            }
+
+
+            return result;
+        }
+
+        private Type[] GetDirectInterfaces(Type type)
+        {
+            // Alle Interfaces der Klasse
+            Type[] allInterfaces = type.GetInterfaces();
+
+            // Interfaces der Basisklasse (falls vorhanden)
+            Type[] baseInterfaces = type.BaseType != null
+                ? type.BaseType.GetInterfaces()
+                : Array.Empty<Type>();
+
+            // Nur direkt implementierte Interfaces
+            IEnumerable<Type> directInterfaces = allInterfaces.Except(baseInterfaces);
+
+            return directInterfaces.ToArray();
+        }
+
+        private void SetTemplateSettings(Classifier classifier, Type type, EmofRepository repository)
+        {
+            classifier.OwnedTemplateSignature = new TemplateSignature();
+
+            Type[] genericTypeTypes = type.GetGenericArguments();
+
+            foreach (Type genericTypeType in genericTypeTypes)
+            {
+
+                classifier.OwnedTemplateSignature.OwnedParameters.Add(new TemplateParameter
+                {
+                    DefaultTypeRef = genericTypeType.Name
+                });
+
+            }
+
+        }
+
+        private void AddProperties(Package package, 
+                                   PackageableElement packageableElement, 
+                                   Type type, 
+                                   EmofRepository repository)
+        {
+            FieldInfo[] fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public);
+
+
+            PropertyInfo[] propertyInfos = type.GetProperties(BindingFlags.DeclaredOnly |
+                                                              BindingFlags.Instance |
+                                                              BindingFlags.Public);
+
+            List<MemberInfo> members = new List<MemberInfo>();
+
+            members.AddRange(fields);
+            members.AddRange(propertyInfos);
+
+            foreach (MemberInfo memberInfo in members)
+            {
+                bool isTypeReference = false;
+
+                bool isNullable = false;
+
+                Type? typeOfMember = null;
+
+                if (memberInfo is PropertyInfo)
+                {
+                    typeOfMember = ((PropertyInfo)memberInfo).PropertyType;
+                }
+                else if (memberInfo is FieldInfo)
+                {
+                    typeOfMember = ((FieldInfo)memberInfo).FieldType;
+                }
+
+                if(memberInfo.Name == "Timestamp")
+                {
+                    ;
+                }
+
+
+                if (typeOfMember != null && typeOfMember.FullName.StartsWith("System.Nullable"))
+                {
+                    typeOfMember = Nullable.GetUnderlyingType(typeOfMember);
+                    isNullable = true;
+                }
+
+                Type typeForMof = typeOfMember!;
+
+                TypeReferenceToAttribute[] typeReferenceToAttributes = (TypeReferenceToAttribute[])Attribute.GetCustomAttributes(memberInfo, 
+                                                                                                                           typeof(TypeReferenceToAttribute)
+                                                                                                                           );
+                if (typeReferenceToAttributes.Length == 1)
+                {
+                    isTypeReference = true;
+                }
+
+                string multiplicity = "1";
+
+                PackageableElement? genericCollectionType = null;
+
+                if (typeOfMember!.Name.StartsWith("List") ||
+                    typeOfMember.Name.StartsWith("ObservableCollection") ||
+                    typeOfMember.Name.StartsWith("Dictionary") || 
+                    typeOfMember.IsArray /* ||
+                    memberInfo.GetIndexParameters().Length > 0*/)
+                {
+                    multiplicity = "*";
+
+                    if (typeOfMember.Name.StartsWith("List"))
+                    {
+                        typeForMof = typeOfMember.GetGenericArguments()[0];
+
+                        genericCollectionType = GetOrCreateElementRecursively(typeOfMember, repository);
+                    }
+                }
+
+                PackageableElement? propertyTypeElement = GetOrCreateElementRecursively(typeForMof, repository);
+
+                TypeReference propertyTypeRef = new TypeReference();
+
+                if (propertyTypeElement != null)
+                {
+                    propertyTypeRef = new TypeReference
+                    {
+                        FullName = propertyTypeElement.FullName,
+                        Version = propertyTypeElement.Version
+                    };
+                }
+
+                Property property = new Property()
+                {
+                    Name = memberInfo.Name,
+                    TypeRef = propertyTypeRef,
+                    Multiplicity = multiplicity,
+                    IsNullable = isNullable
+                };
+
+                if (memberInfo is PropertyInfo)
+                {
+                    property.Kind = PropertyKind.Property;
+                    property.IsReadOnly = !((PropertyInfo)memberInfo).CanWrite;
+                }
+                else if(memberInfo is FieldInfo)
+                {
+                    property.Kind = PropertyKind.Field;
+                    property.IsReadOnly = false;
+                }
+
+                if (genericCollectionType != null)
+                {
+                    property.CollectionTypeRef = new TypeReference
+                    {
+                        FullName = genericCollectionType.FullName,
+                        Version = genericCollectionType.Version
+                    };
+                }
+
+                AddPropertyAnnotations(memberInfo, property, repository);
+
+                if (!isTypeReference)
+                {
+                    if (type.IsClass && packageableElement != null)
+                    {
+                        Class emofClass = (Class)packageableElement;
+                        emofClass.OwnedAttributes.Add(property);
+                    }
+                    else if (type.IsInterface && packageableElement != null)
+                    {
+                        Interface emofInterface = (Interface)packageableElement;
+                        emofInterface.OwnedAttributes.Add(property);
+                    }
+                }
+                else // create association
+                {
+
+                    Type referencedType = typeReferenceToAttributes[0].Type;
+
+                    if (packageableElement != null)
+                    {
+                        Association association = new Association()
+                        {
+                            OwningPackage = package,
+                            Name = memberInfo.Name
+                        };
+
+                        Property assocationSource = new Property()
+                        {
+                            TypeRef = new TypeReference
+                            {
+                                FullName = packageableElement.FullName,
+                                Version = packageableElement.Version
+                            },
+                            Name = string.Empty,
+                            Multiplicity = "1"
+                        };
+
+                        association.OwnedEnds.Add(assocationSource);
+
+                        property.TypeRef = new TypeReference
+                        {
+                            FullName = referencedType.FullName,
+                            Version = referencedType.Assembly.GetName().Version.ToString()
+                        };
+
+                        association.OwnedEnds.Add(property);
+
+                        package.PackagedElements.Add(association);
+                    }
+                }
+            }
+        }
+
+        private void AddPropertyAnnotations(MemberInfo propertyInfo, Property property, EmofRepository repository)
+        {
+            IEnumerable<Attribute> customAttributes = propertyInfo.GetCustomAttributes();
+            
+            //IList<CustomAttributeData> attributeDatas = CustomAttributeData.GetCustomAttributes(propertyInfo);
+
+            //foreach(CustomAttributeData customAttributeData in attributeDatas)
+            //{
+            //    IList<CustomAttributeTypedArgument> constructorArguments = customAttributeData.ConstructorArguments;
+            //    var namedArgument = customAttributeData.NamedArguments;
+
+            //    ConstructorInfo constructor = customAttributeData.Constructor;
+            //    ParameterInfo[] parameterInfos = constructor.GetParameters();
+            //}
+
+
+            foreach(Attribute attribute in customAttributes)
+            {
+                Type attributeType = attribute.GetType();
+
+                if (attributeType.Namespace != "MDD4All.DataModeling.Attributes")
+                {
+
+                    PackageableElement? attributeTypeElement = GetOrCreateElementRecursively(attributeType, repository);
+
+                    if (attributeTypeElement != null)
+                    {
+                        InstanceSpecification annotationInstance = new InstanceSpecification();
+                        annotationInstance.ClassifierRef = new TypeReference
+                        {
+                            FullName = attributeType.FullName,
+                            Version = attributeType.Assembly.GetName().Version.ToString()
+                        };
+
+                        PropertyInfo[] propertyInfos = attributeType.GetProperties(BindingFlags.DeclaredOnly |
+                                                                                   BindingFlags.Instance |
+                                                                                   BindingFlags.Public);
+
+                        foreach (PropertyInfo attributePropertyInfo in propertyInfos)
+                        {
+                            object? value = attributePropertyInfo.GetValue(attribute);
+
+                            if (value != null)
+                            {
+                                Slot slot = new Slot
+                                {
+                                    DefiningFeatureRef = attributePropertyInfo.Name
+                                };
+
+                                slot.Value = value.ToString();
+
+                                if (annotationInstance.Slots == null)
+                                {
+                                    annotationInstance.Slots = new List<Slot>();
+                                }
+                                annotationInstance.Slots.Add(slot);
+                            }
+
+
+                        }
+
+                        if (property.Annotations == null)
+                        {
+                            property.Annotations = new List<InstanceSpecification>();
+                        }
+                        property.Annotations.Add(annotationInstance);
+                    }
+                }
+            }
+        }
+
+        private Package? GetOrCreatePackageForNamespace(string namespaceName, EmofRepository repository)
+        {
+            Package? result = null;
+
+            string[] namepsaceParts = namespaceName.Split('.');
+
+            if (namepsaceParts.Length > 0)
+            {
+                result = GetOrCreateChildPackage(repository.RootPackages, namepsaceParts[0], null);
+
+                if (result != null)
+                {
+                    for (int counter = 1; counter < namepsaceParts.Length; counter++)
+                    {
+                        result = GetOrCreateChildPackage(result!.NestedPackages, namepsaceParts[counter], result);
+                    }
+                }
+            }
+            return result;
+
+        }
+
+        private Package? GetOrCreateChildPackage(List<Package> children, string childName, Package? parent)
+        {
+            Package? result = null;
+
+            foreach (Package childPackage in children)
+            {
+                if (childPackage.Name == childName)
+                {
+                    result = childPackage;
+                    break;
+                }
+            }
+
+            // if not found, create one
+            if (result == null)
+            {
+                result = new Package()
+                {
+                    Name = childName
+                };
+
+                result.OwningPackage = parent;
+
+                children.Add(result);
+            }
+
+            return result;
+        }
+
+
+
+    }
+}

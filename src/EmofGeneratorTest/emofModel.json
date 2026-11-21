@@ -1,0 +1,1326 @@
+{
+  "RootPackages": [
+    {
+      "Name": "Microsoft",
+      "Visibility": "Public",
+      "Namespace": "",
+      "FullName": "Microsoft",
+      "NestedPackages": [
+        {
+          "Name": "CodeAnalysis",
+          "Visibility": "Public",
+          "Namespace": "Microsoft",
+          "FullName": "Microsoft.CodeAnalysis",
+          "NestedPackages": [],
+          "PackagedElements": [
+            {
+              "$type": "MDD4All.EMOF.DataModels.Class, MDD4All.EMOF.DataModels",
+              "Name": "EmbeddedAttribute",
+              "Visibility": "Public",
+              "IsAbstract": false,
+              "Namespace": "Microsoft.CodeAnalysis",
+              "FullName": "Microsoft.CodeAnalysis.EmbeddedAttribute",
+              "SuperClassRefs": [
+                "System.Attribute"
+              ],
+              "OwnedAttributes": []
+            }
+          ]
+        }
+      ],
+      "PackagedElements": []
+    },
+    {
+      "Name": "System",
+      "Visibility": "Public",
+      "Namespace": "",
+      "FullName": "System",
+      "NestedPackages": [
+        {
+          "Name": "Runtime",
+          "Visibility": "Public",
+          "Namespace": "System",
+          "FullName": "System.Runtime",
+          "NestedPackages": [
+            {
+              "Name": "CompilerServices",
+              "Visibility": "Public",
+              "Namespace": "System.Runtime",
+              "FullName": "System.Runtime.CompilerServices",
+              "NestedPackages": [],
+              "PackagedElements": [
+                {
+                  "$type": "MDD4All.EMOF.DataModels.Class, MDD4All.EMOF.DataModels",
+                  "Name": "NullableAttribute",
+                  "Visibility": "Public",
+                  "IsAbstract": false,
+                  "Namespace": "System.Runtime.CompilerServices",
+                  "FullName": "System.Runtime.CompilerServices.NullableAttribute",
+                  "SuperClassRefs": [
+                    "System.Attribute"
+                  ],
+                  "OwnedAttributes": []
+                },
+                {
+                  "$type": "MDD4All.EMOF.DataModels.Class, MDD4All.EMOF.DataModels",
+                  "Name": "NullableContextAttribute",
+                  "Visibility": "Public",
+                  "IsAbstract": false,
+                  "Namespace": "System.Runtime.CompilerServices",
+                  "FullName": "System.Runtime.CompilerServices.NullableContextAttribute",
+                  "SuperClassRefs": [
+                    "System.Attribute"
+                  ],
+                  "OwnedAttributes": []
+                }
+              ]
+            }
+          ],
+          "PackagedElements": []
+        },
+        {
+          "Name": "Collections",
+          "Visibility": "Public",
+          "Namespace": "System",
+          "FullName": "System.Collections",
+          "NestedPackages": [
+            {
+              "Name": "Generic",
+              "Visibility": "Public",
+              "Namespace": "System.Collections",
+              "FullName": "System.Collections.Generic",
+              "NestedPackages": [],
+              "PackagedElements": [
+                {
+                  "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+                  "Name": "IEnumerable",
+                  "Visibility": "Public",
+                  "IsAbstract": false,
+                  "Namespace": "System.Collections.Generic",
+                  "FullName": "System.Collections.Generic.IEnumerable",
+                  "OwnedTemplateSignature": {
+                    "OwnedParameters": [
+                      {
+                        "DefaultTypeRef": "Char"
+                      }
+                    ]
+                  },
+                  "RedefinedInterfacesRef": [
+                    "System.Collections.IEnumerable"
+                  ],
+                  "OwnedAttributes": []
+                },
+                {
+                  "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+                  "Name": "ICollection",
+                  "Visibility": "Public",
+                  "IsAbstract": false,
+                  "Namespace": "System.Collections.Generic",
+                  "FullName": "System.Collections.Generic.ICollection",
+                  "OwnedTemplateSignature": {
+                    "OwnedParameters": [
+                      {
+                        "DefaultTypeRef": "Person"
+                      }
+                    ]
+                  },
+                  "RedefinedInterfacesRef": [
+                    "System.Collections.Generic.IEnumerable",
+                    "System.Collections.IEnumerable"
+                  ],
+                  "OwnedAttributes": [
+                    {
+                      "Name": "Count",
+                      "Visibility": "Public",
+                      "Kind": "Property",
+                      "IsReadOnly": true,
+                      "IsOrdered": false,
+                      "IsUnique": false,
+                      "Multiplicity": "1",
+                      "TypeRef": "System.Int32"
+                    },
+                    {
+                      "Name": "IsReadOnly",
+                      "Visibility": "Public",
+                      "Kind": "Property",
+                      "IsReadOnly": true,
+                      "IsOrdered": false,
+                      "IsUnique": false,
+                      "Multiplicity": "1",
+                      "TypeRef": "System.Boolean"
+                    }
+                  ]
+                },
+                {
+                  "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+                  "Name": "IList",
+                  "Visibility": "Public",
+                  "IsAbstract": false,
+                  "Namespace": "System.Collections.Generic",
+                  "FullName": "System.Collections.Generic.IList",
+                  "OwnedTemplateSignature": {
+                    "OwnedParameters": [
+                      {
+                        "DefaultTypeRef": "Person"
+                      }
+                    ]
+                  },
+                  "RedefinedInterfacesRef": [
+                    "System.Collections.Generic.ICollection",
+                    "System.Collections.Generic.IEnumerable",
+                    "System.Collections.IEnumerable"
+                  ],
+                  "OwnedAttributes": [
+                    {
+                      "Name": "Item",
+                      "Visibility": "Public",
+                      "Kind": "Property",
+                      "IsReadOnly": false,
+                      "IsOrdered": false,
+                      "IsUnique": false,
+                      "Multiplicity": "*",
+                      "TypeRef": "MDD4All.Person.DataModels.Person"
+                    }
+                  ]
+                },
+                {
+                  "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+                  "Name": "IReadOnlyCollection",
+                  "Visibility": "Public",
+                  "IsAbstract": false,
+                  "Namespace": "System.Collections.Generic",
+                  "FullName": "System.Collections.Generic.IReadOnlyCollection",
+                  "OwnedTemplateSignature": {
+                    "OwnedParameters": [
+                      {
+                        "DefaultTypeRef": "Person"
+                      }
+                    ]
+                  },
+                  "RedefinedInterfacesRef": [
+                    "System.Collections.Generic.IEnumerable",
+                    "System.Collections.IEnumerable"
+                  ],
+                  "OwnedAttributes": [
+                    {
+                      "Name": "Count",
+                      "Visibility": "Public",
+                      "Kind": "Property",
+                      "IsReadOnly": true,
+                      "IsOrdered": false,
+                      "IsUnique": false,
+                      "Multiplicity": "1",
+                      "TypeRef": "System.Int32"
+                    }
+                  ]
+                },
+                {
+                  "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+                  "Name": "IReadOnlyList",
+                  "Visibility": "Public",
+                  "IsAbstract": false,
+                  "Namespace": "System.Collections.Generic",
+                  "FullName": "System.Collections.Generic.IReadOnlyList",
+                  "OwnedTemplateSignature": {
+                    "OwnedParameters": [
+                      {
+                        "DefaultTypeRef": "Person"
+                      }
+                    ]
+                  },
+                  "RedefinedInterfacesRef": [
+                    "System.Collections.Generic.IReadOnlyCollection",
+                    "System.Collections.Generic.IEnumerable",
+                    "System.Collections.IEnumerable"
+                  ],
+                  "OwnedAttributes": [
+                    {
+                      "Name": "Item",
+                      "Visibility": "Public",
+                      "Kind": "Property",
+                      "IsReadOnly": true,
+                      "IsOrdered": false,
+                      "IsUnique": false,
+                      "Multiplicity": "*",
+                      "TypeRef": "MDD4All.Person.DataModels.Person"
+                    }
+                  ]
+                },
+                {
+                  "$type": "MDD4All.EMOF.DataModels.Class, MDD4All.EMOF.DataModels",
+                  "Name": "List",
+                  "Visibility": "Public",
+                  "IsAbstract": false,
+                  "Namespace": "System.Collections.Generic",
+                  "FullName": "System.Collections.Generic.List",
+                  "OwnedTemplateSignature": {
+                    "OwnedParameters": []
+                  },
+                  "SuperClassRefs": [
+                    "System.Object",
+                    "System.Collections.Generic.IList",
+                    "System.Collections.Generic.ICollection",
+                    "System.Collections.Generic.IEnumerable",
+                    "System.Collections.IEnumerable",
+                    "System.Collections.IList",
+                    "System.Collections.ICollection",
+                    "System.Collections.Generic.IReadOnlyList",
+                    "System.Collections.Generic.IReadOnlyCollection"
+                  ],
+                  "OwnedAttributes": [
+                    {
+                      "Name": "Capacity",
+                      "Visibility": "Public",
+                      "Kind": "Property",
+                      "IsReadOnly": false,
+                      "IsOrdered": false,
+                      "IsUnique": false,
+                      "Multiplicity": "1",
+                      "TypeRef": "System.Int32"
+                    },
+                    {
+                      "Name": "Count",
+                      "Visibility": "Public",
+                      "Kind": "Property",
+                      "IsReadOnly": true,
+                      "IsOrdered": false,
+                      "IsUnique": false,
+                      "Multiplicity": "1",
+                      "TypeRef": "System.Int32"
+                    },
+                    {
+                      "Name": "Item",
+                      "Visibility": "Public",
+                      "Kind": "Property",
+                      "IsReadOnly": false,
+                      "IsOrdered": false,
+                      "IsUnique": false,
+                      "Multiplicity": "*",
+                      "TypeRef": "MDD4All.Person.DataModels.Person"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "PackagedElements": [
+            {
+              "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+              "Name": "IEnumerable",
+              "Visibility": "Public",
+              "IsAbstract": false,
+              "Namespace": "System.Collections",
+              "FullName": "System.Collections.IEnumerable",
+              "OwnedAttributes": []
+            },
+            {
+              "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+              "Name": "ICollection",
+              "Visibility": "Public",
+              "IsAbstract": false,
+              "Namespace": "System.Collections",
+              "FullName": "System.Collections.ICollection",
+              "RedefinedInterfacesRef": [
+                "System.Collections.IEnumerable"
+              ],
+              "OwnedAttributes": [
+                {
+                  "Name": "Count",
+                  "Visibility": "Public",
+                  "Kind": "Property",
+                  "IsReadOnly": true,
+                  "IsOrdered": false,
+                  "IsUnique": false,
+                  "Multiplicity": "1",
+                  "TypeRef": "System.Int32"
+                },
+                {
+                  "Name": "SyncRoot",
+                  "Visibility": "Public",
+                  "Kind": "Property",
+                  "IsReadOnly": true,
+                  "IsOrdered": false,
+                  "IsUnique": false,
+                  "Multiplicity": "1",
+                  "TypeRef": "System.Object"
+                },
+                {
+                  "Name": "IsSynchronized",
+                  "Visibility": "Public",
+                  "Kind": "Property",
+                  "IsReadOnly": true,
+                  "IsOrdered": false,
+                  "IsUnique": false,
+                  "Multiplicity": "1",
+                  "TypeRef": "System.Boolean"
+                }
+              ]
+            },
+            {
+              "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+              "Name": "IList",
+              "Visibility": "Public",
+              "IsAbstract": false,
+              "Namespace": "System.Collections",
+              "FullName": "System.Collections.IList",
+              "RedefinedInterfacesRef": [
+                "System.Collections.ICollection",
+                "System.Collections.IEnumerable"
+              ],
+              "OwnedAttributes": [
+                {
+                  "Name": "Item",
+                  "Visibility": "Public",
+                  "Kind": "Property",
+                  "IsReadOnly": false,
+                  "IsOrdered": false,
+                  "IsUnique": false,
+                  "Multiplicity": "*",
+                  "TypeRef": "System.Object"
+                },
+                {
+                  "Name": "IsReadOnly",
+                  "Visibility": "Public",
+                  "Kind": "Property",
+                  "IsReadOnly": true,
+                  "IsOrdered": false,
+                  "IsUnique": false,
+                  "Multiplicity": "1",
+                  "TypeRef": "System.Boolean"
+                },
+                {
+                  "Name": "IsFixedSize",
+                  "Visibility": "Public",
+                  "Kind": "Property",
+                  "IsReadOnly": true,
+                  "IsOrdered": false,
+                  "IsUnique": false,
+                  "Multiplicity": "1",
+                  "TypeRef": "System.Boolean"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "PackagedElements": [
+        {
+          "$type": "MDD4All.EMOF.DataModels.Class, MDD4All.EMOF.DataModels",
+          "Name": "Object",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.Object",
+          "OwnedAttributes": []
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Class, MDD4All.EMOF.DataModels",
+          "Name": "Attribute",
+          "Visibility": "Public",
+          "IsAbstract": true,
+          "Namespace": "System",
+          "FullName": "System.Attribute",
+          "SuperClassRefs": [
+            "System.Object"
+          ],
+          "OwnedAttributes": [
+            {
+              "Name": "TypeId",
+              "Visibility": "Public",
+              "Kind": "Property",
+              "IsReadOnly": true,
+              "IsOrdered": false,
+              "IsUnique": false,
+              "Multiplicity": "1",
+              "TypeRef": "System.Object"
+            }
+          ]
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+          "Name": "IComparable",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.IComparable",
+          "OwnedAttributes": []
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+          "Name": "IConvertible",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.IConvertible",
+          "OwnedAttributes": []
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+          "Name": "IEquatable",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.IEquatable",
+          "OwnedTemplateSignature": {
+            "OwnedParameters": [
+              {
+                "DefaultTypeRef": "String"
+              }
+            ]
+          },
+          "OwnedAttributes": []
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+          "Name": "ICloneable",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.ICloneable",
+          "OwnedAttributes": []
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Class, MDD4All.EMOF.DataModels",
+          "Name": "String",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.String",
+          "SuperClassRefs": [
+            "System.Object",
+            "System.IComparable",
+            "System.Collections.IEnumerable",
+            "System.IConvertible",
+            "System.Collections.Generic.IEnumerable",
+            "System.IComparable",
+            "System.IEquatable",
+            "System.ICloneable"
+          ],
+          "OwnedAttributes": [
+            {
+              "Name": "Chars",
+              "Visibility": "Public",
+              "Kind": "Property",
+              "IsReadOnly": true,
+              "IsOrdered": false,
+              "IsUnique": false,
+              "Multiplicity": "*",
+              "TypeRef": "System.Char"
+            },
+            {
+              "Name": "Length",
+              "Visibility": "Public",
+              "Kind": "Property",
+              "IsReadOnly": true,
+              "IsOrdered": false,
+              "IsUnique": false,
+              "Multiplicity": "1",
+              "TypeRef": "System.Int32"
+            }
+          ]
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Class, MDD4All.EMOF.DataModels",
+          "Name": "ValueType",
+          "Visibility": "Public",
+          "IsAbstract": true,
+          "Namespace": "System",
+          "FullName": "System.ValueType",
+          "SuperClassRefs": [
+            "System.Object"
+          ],
+          "OwnedAttributes": []
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+          "Name": "IFormattable",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.IFormattable",
+          "OwnedAttributes": []
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+          "Name": "ISpanFormattable",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.ISpanFormattable",
+          "RedefinedInterfacesRef": [
+            "System.IFormattable"
+          ],
+          "OwnedAttributes": []
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+          "Name": "IBitwiseOperators",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.IBitwiseOperators",
+          "OwnedTemplateSignature": {
+            "OwnedParameters": [
+              {
+                "DefaultTypeRef": "Char"
+              },
+              {
+                "DefaultTypeRef": "Char"
+              },
+              {
+                "DefaultTypeRef": "Char"
+              }
+            ]
+          },
+          "OwnedAttributes": []
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+          "Name": "IAdditionOperators",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.IAdditionOperators",
+          "OwnedTemplateSignature": {
+            "OwnedParameters": [
+              {
+                "DefaultTypeRef": "Char"
+              },
+              {
+                "DefaultTypeRef": "Char"
+              },
+              {
+                "DefaultTypeRef": "Char"
+              }
+            ]
+          },
+          "OwnedAttributes": []
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+          "Name": "IAdditiveIdentity",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.IAdditiveIdentity",
+          "OwnedTemplateSignature": {
+            "OwnedParameters": [
+              {
+                "DefaultTypeRef": "Char"
+              },
+              {
+                "DefaultTypeRef": "Char"
+              }
+            ]
+          },
+          "OwnedAttributes": []
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+          "Name": "IEqualityOperators",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.IEqualityOperators",
+          "OwnedTemplateSignature": {
+            "OwnedParameters": [
+              {
+                "DefaultTypeRef": "Char"
+              },
+              {
+                "DefaultTypeRef": "Char"
+              }
+            ]
+          },
+          "RedefinedInterfacesRef": [
+            "System.IEquatable"
+          ],
+          "OwnedAttributes": []
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+          "Name": "IComparisonOperators",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.IComparisonOperators",
+          "OwnedTemplateSignature": {
+            "OwnedParameters": [
+              {
+                "DefaultTypeRef": "Char"
+              },
+              {
+                "DefaultTypeRef": "Char"
+              }
+            ]
+          },
+          "RedefinedInterfacesRef": [
+            "System.IComparable",
+            "System.IComparable",
+            "System.IEqualityOperators",
+            "System.IEquatable"
+          ],
+          "OwnedAttributes": []
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+          "Name": "IDecrementOperators",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.IDecrementOperators",
+          "OwnedTemplateSignature": {
+            "OwnedParameters": [
+              {
+                "DefaultTypeRef": "Char"
+              }
+            ]
+          },
+          "OwnedAttributes": []
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+          "Name": "IDivisionOperators",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.IDivisionOperators",
+          "OwnedTemplateSignature": {
+            "OwnedParameters": [
+              {
+                "DefaultTypeRef": "Char"
+              },
+              {
+                "DefaultTypeRef": "Char"
+              },
+              {
+                "DefaultTypeRef": "Char"
+              }
+            ]
+          },
+          "OwnedAttributes": []
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+          "Name": "IIncrementOperators",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.IIncrementOperators",
+          "OwnedTemplateSignature": {
+            "OwnedParameters": [
+              {
+                "DefaultTypeRef": "Char"
+              }
+            ]
+          },
+          "OwnedAttributes": []
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+          "Name": "IModulusOperators",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.IModulusOperators",
+          "OwnedTemplateSignature": {
+            "OwnedParameters": [
+              {
+                "DefaultTypeRef": "Char"
+              },
+              {
+                "DefaultTypeRef": "Char"
+              },
+              {
+                "DefaultTypeRef": "Char"
+              }
+            ]
+          },
+          "OwnedAttributes": []
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+          "Name": "IMultiplicativeIdentity",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.IMultiplicativeIdentity",
+          "OwnedTemplateSignature": {
+            "OwnedParameters": [
+              {
+                "DefaultTypeRef": "Char"
+              },
+              {
+                "DefaultTypeRef": "Char"
+              }
+            ]
+          },
+          "OwnedAttributes": []
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+          "Name": "IMultiplyOperators",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.IMultiplyOperators",
+          "OwnedTemplateSignature": {
+            "OwnedParameters": [
+              {
+                "DefaultTypeRef": "Char"
+              },
+              {
+                "DefaultTypeRef": "Char"
+              },
+              {
+                "DefaultTypeRef": "Char"
+              }
+            ]
+          },
+          "OwnedAttributes": []
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+          "Name": "IParseable",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.IParseable",
+          "OwnedTemplateSignature": {
+            "OwnedParameters": [
+              {
+                "DefaultTypeRef": "Char"
+              }
+            ]
+          },
+          "OwnedAttributes": []
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+          "Name": "ISpanParseable",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.ISpanParseable",
+          "OwnedTemplateSignature": {
+            "OwnedParameters": [
+              {
+                "DefaultTypeRef": "Char"
+              }
+            ]
+          },
+          "RedefinedInterfacesRef": [
+            "System.IParseable"
+          ],
+          "OwnedAttributes": []
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+          "Name": "ISubtractionOperators",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.ISubtractionOperators",
+          "OwnedTemplateSignature": {
+            "OwnedParameters": [
+              {
+                "DefaultTypeRef": "Char"
+              },
+              {
+                "DefaultTypeRef": "Char"
+              },
+              {
+                "DefaultTypeRef": "Char"
+              }
+            ]
+          },
+          "OwnedAttributes": []
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+          "Name": "IUnaryNegationOperators",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.IUnaryNegationOperators",
+          "OwnedTemplateSignature": {
+            "OwnedParameters": [
+              {
+                "DefaultTypeRef": "Char"
+              },
+              {
+                "DefaultTypeRef": "Char"
+              }
+            ]
+          },
+          "OwnedAttributes": []
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+          "Name": "IUnaryPlusOperators",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.IUnaryPlusOperators",
+          "OwnedTemplateSignature": {
+            "OwnedParameters": [
+              {
+                "DefaultTypeRef": "Char"
+              },
+              {
+                "DefaultTypeRef": "Char"
+              }
+            ]
+          },
+          "OwnedAttributes": []
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+          "Name": "INumber",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.INumber",
+          "OwnedTemplateSignature": {
+            "OwnedParameters": [
+              {
+                "DefaultTypeRef": "Char"
+              }
+            ]
+          },
+          "RedefinedInterfacesRef": [
+            "System.IAdditionOperators",
+            "System.IAdditiveIdentity",
+            "System.IComparisonOperators",
+            "System.IComparable",
+            "System.IComparable",
+            "System.IEqualityOperators",
+            "System.IEquatable",
+            "System.IDecrementOperators",
+            "System.IDivisionOperators",
+            "System.IIncrementOperators",
+            "System.IModulusOperators",
+            "System.IMultiplicativeIdentity",
+            "System.IMultiplyOperators",
+            "System.ISpanFormattable",
+            "System.IFormattable",
+            "System.ISpanParseable",
+            "System.IParseable",
+            "System.ISubtractionOperators",
+            "System.IUnaryNegationOperators",
+            "System.IUnaryPlusOperators"
+          ],
+          "OwnedAttributes": []
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+          "Name": "IBinaryNumber",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.IBinaryNumber",
+          "OwnedTemplateSignature": {
+            "OwnedParameters": [
+              {
+                "DefaultTypeRef": "Char"
+              }
+            ]
+          },
+          "RedefinedInterfacesRef": [
+            "System.IBitwiseOperators",
+            "System.INumber",
+            "System.IAdditionOperators",
+            "System.IAdditiveIdentity",
+            "System.IComparisonOperators",
+            "System.IComparable",
+            "System.IComparable",
+            "System.IEqualityOperators",
+            "System.IEquatable",
+            "System.IDecrementOperators",
+            "System.IDivisionOperators",
+            "System.IIncrementOperators",
+            "System.IModulusOperators",
+            "System.IMultiplicativeIdentity",
+            "System.IMultiplyOperators",
+            "System.ISpanFormattable",
+            "System.IFormattable",
+            "System.ISpanParseable",
+            "System.IParseable",
+            "System.ISubtractionOperators",
+            "System.IUnaryNegationOperators",
+            "System.IUnaryPlusOperators"
+          ],
+          "OwnedAttributes": []
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+          "Name": "IShiftOperators",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.IShiftOperators",
+          "OwnedTemplateSignature": {
+            "OwnedParameters": [
+              {
+                "DefaultTypeRef": "Char"
+              },
+              {
+                "DefaultTypeRef": "Char"
+              }
+            ]
+          },
+          "OwnedAttributes": []
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+          "Name": "IBinaryInteger",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.IBinaryInteger",
+          "OwnedTemplateSignature": {
+            "OwnedParameters": [
+              {
+                "DefaultTypeRef": "Char"
+              }
+            ]
+          },
+          "RedefinedInterfacesRef": [
+            "System.IBinaryNumber",
+            "System.IBitwiseOperators",
+            "System.INumber",
+            "System.IAdditionOperators",
+            "System.IAdditiveIdentity",
+            "System.IComparisonOperators",
+            "System.IComparable",
+            "System.IComparable",
+            "System.IEqualityOperators",
+            "System.IEquatable",
+            "System.IDecrementOperators",
+            "System.IDivisionOperators",
+            "System.IIncrementOperators",
+            "System.IModulusOperators",
+            "System.IMultiplicativeIdentity",
+            "System.IMultiplyOperators",
+            "System.ISpanFormattable",
+            "System.IFormattable",
+            "System.ISpanParseable",
+            "System.IParseable",
+            "System.ISubtractionOperators",
+            "System.IUnaryNegationOperators",
+            "System.IUnaryPlusOperators",
+            "System.IShiftOperators"
+          ],
+          "OwnedAttributes": []
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+          "Name": "IMinMaxValue",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.IMinMaxValue",
+          "OwnedTemplateSignature": {
+            "OwnedParameters": [
+              {
+                "DefaultTypeRef": "Char"
+              }
+            ]
+          },
+          "OwnedAttributes": []
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+          "Name": "IUnsignedNumber",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.IUnsignedNumber",
+          "OwnedTemplateSignature": {
+            "OwnedParameters": [
+              {
+                "DefaultTypeRef": "Char"
+              }
+            ]
+          },
+          "RedefinedInterfacesRef": [
+            "System.INumber",
+            "System.IAdditionOperators",
+            "System.IAdditiveIdentity",
+            "System.IComparisonOperators",
+            "System.IComparable",
+            "System.IComparable",
+            "System.IEqualityOperators",
+            "System.IEquatable",
+            "System.IDecrementOperators",
+            "System.IDivisionOperators",
+            "System.IIncrementOperators",
+            "System.IModulusOperators",
+            "System.IMultiplicativeIdentity",
+            "System.IMultiplyOperators",
+            "System.ISpanFormattable",
+            "System.IFormattable",
+            "System.ISpanParseable",
+            "System.IParseable",
+            "System.ISubtractionOperators",
+            "System.IUnaryNegationOperators",
+            "System.IUnaryPlusOperators"
+          ],
+          "OwnedAttributes": []
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Class, MDD4All.EMOF.DataModels",
+          "Name": "Char",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.Char",
+          "SuperClassRefs": [
+            "System.ValueType",
+            "System.IComparable",
+            "System.IComparable",
+            "System.IEquatable",
+            "System.IConvertible",
+            "System.ISpanFormattable",
+            "System.IFormattable",
+            "System.IBinaryInteger",
+            "System.IBinaryNumber",
+            "System.IBitwiseOperators",
+            "System.INumber",
+            "System.IAdditionOperators",
+            "System.IAdditiveIdentity",
+            "System.IComparisonOperators",
+            "System.IEqualityOperators",
+            "System.IDecrementOperators",
+            "System.IDivisionOperators",
+            "System.IIncrementOperators",
+            "System.IModulusOperators",
+            "System.IMultiplicativeIdentity",
+            "System.IMultiplyOperators",
+            "System.ISpanParseable",
+            "System.IParseable",
+            "System.ISubtractionOperators",
+            "System.IUnaryNegationOperators",
+            "System.IUnaryPlusOperators",
+            "System.IShiftOperators",
+            "System.IMinMaxValue",
+            "System.IUnsignedNumber"
+          ],
+          "OwnedAttributes": []
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Interface, MDD4All.EMOF.DataModels",
+          "Name": "ISignedNumber",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.ISignedNumber",
+          "OwnedTemplateSignature": {
+            "OwnedParameters": [
+              {
+                "DefaultTypeRef": "Int32"
+              }
+            ]
+          },
+          "RedefinedInterfacesRef": [
+            "System.INumber",
+            "System.IAdditionOperators",
+            "System.IAdditiveIdentity",
+            "System.IComparisonOperators",
+            "System.IComparable",
+            "System.IComparable",
+            "System.IEqualityOperators",
+            "System.IEquatable",
+            "System.IDecrementOperators",
+            "System.IDivisionOperators",
+            "System.IIncrementOperators",
+            "System.IModulusOperators",
+            "System.IMultiplicativeIdentity",
+            "System.IMultiplyOperators",
+            "System.ISpanFormattable",
+            "System.IFormattable",
+            "System.ISpanParseable",
+            "System.IParseable",
+            "System.ISubtractionOperators",
+            "System.IUnaryNegationOperators",
+            "System.IUnaryPlusOperators"
+          ],
+          "OwnedAttributes": []
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Class, MDD4All.EMOF.DataModels",
+          "Name": "Int32",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.Int32",
+          "SuperClassRefs": [
+            "System.ValueType",
+            "System.IComparable",
+            "System.IConvertible",
+            "System.ISpanFormattable",
+            "System.IFormattable",
+            "System.IComparable",
+            "System.IEquatable",
+            "System.IBinaryInteger",
+            "System.IBinaryNumber",
+            "System.IBitwiseOperators",
+            "System.INumber",
+            "System.IAdditionOperators",
+            "System.IAdditiveIdentity",
+            "System.IComparisonOperators",
+            "System.IEqualityOperators",
+            "System.IDecrementOperators",
+            "System.IDivisionOperators",
+            "System.IIncrementOperators",
+            "System.IModulusOperators",
+            "System.IMultiplicativeIdentity",
+            "System.IMultiplyOperators",
+            "System.ISpanParseable",
+            "System.IParseable",
+            "System.ISubtractionOperators",
+            "System.IUnaryNegationOperators",
+            "System.IUnaryPlusOperators",
+            "System.IShiftOperators",
+            "System.IMinMaxValue",
+            "System.ISignedNumber"
+          ],
+          "OwnedAttributes": []
+        },
+        {
+          "$type": "MDD4All.EMOF.DataModels.Class, MDD4All.EMOF.DataModels",
+          "Name": "Boolean",
+          "Visibility": "Public",
+          "IsAbstract": false,
+          "Namespace": "System",
+          "FullName": "System.Boolean",
+          "SuperClassRefs": [
+            "System.ValueType",
+            "System.IComparable",
+            "System.IConvertible",
+            "System.IComparable",
+            "System.IEquatable"
+          ],
+          "OwnedAttributes": []
+        }
+      ]
+    },
+    {
+      "Name": "MDD4All",
+      "Visibility": "Public",
+      "Namespace": "",
+      "FullName": "MDD4All",
+      "NestedPackages": [
+        {
+          "Name": "Person",
+          "Visibility": "Public",
+          "Namespace": "MDD4All",
+          "FullName": "MDD4All.Person",
+          "NestedPackages": [
+            {
+              "Name": "DataModels",
+              "Visibility": "Public",
+              "Namespace": "MDD4All.Person",
+              "FullName": "MDD4All.Person.DataModels",
+              "NestedPackages": [],
+              "PackagedElements": [
+                {
+                  "$type": "MDD4All.EMOF.DataModels.Class, MDD4All.EMOF.DataModels",
+                  "Name": "Address",
+                  "Visibility": "Public",
+                  "IsAbstract": false,
+                  "Namespace": "MDD4All.Person.DataModels",
+                  "FullName": "MDD4All.Person.DataModels.Address",
+                  "SuperClassRefs": [
+                    "System.Object"
+                  ],
+                  "OwnedAttributes": [
+                    {
+                      "Name": "Street",
+                      "Visibility": "Public",
+                      "Kind": "Property",
+                      "IsReadOnly": false,
+                      "IsOrdered": false,
+                      "IsUnique": false,
+                      "Multiplicity": "1",
+                      "TypeRef": "System.String"
+                    }
+                  ]
+                },
+                {
+                  "$type": "MDD4All.EMOF.DataModels.Class, MDD4All.EMOF.DataModels",
+                  "Name": "Person",
+                  "Visibility": "Public",
+                  "IsAbstract": false,
+                  "Namespace": "MDD4All.Person.DataModels",
+                  "FullName": "MDD4All.Person.DataModels.Person",
+                  "SuperClassRefs": [
+                    "System.Object"
+                  ],
+                  "OwnedAttributes": [
+                    {
+                      "Name": "FirstName",
+                      "Visibility": "Public",
+                      "Kind": "Property",
+                      "IsReadOnly": false,
+                      "IsOrdered": false,
+                      "IsUnique": false,
+                      "Multiplicity": "1",
+                      "TypeRef": "System.String"
+                    },
+                    {
+                      "Name": "LastName",
+                      "Visibility": "Public",
+                      "Kind": "Property",
+                      "IsReadOnly": false,
+                      "IsOrdered": false,
+                      "IsUnique": false,
+                      "Multiplicity": "1",
+                      "TypeRef": "System.String"
+                    },
+                    {
+                      "Name": "Address",
+                      "Visibility": "Public",
+                      "Kind": "Property",
+                      "IsReadOnly": false,
+                      "IsOrdered": false,
+                      "IsUnique": false,
+                      "Multiplicity": "1",
+                      "TypeRef": "MDD4All.Person.DataModels.Address"
+                    }
+                  ]
+                },
+                {
+                  "$type": "MDD4All.EMOF.DataModels.Class, MDD4All.EMOF.DataModels",
+                  "Name": "Repository",
+                  "Visibility": "Public",
+                  "IsAbstract": false,
+                  "Namespace": "MDD4All.Person.DataModels",
+                  "FullName": "MDD4All.Person.DataModels.Repository",
+                  "SuperClassRefs": [
+                    "System.Object"
+                  ],
+                  "OwnedAttributes": [
+                    {
+                      "Name": "Persons",
+                      "Visibility": "Public",
+                      "Kind": "Property",
+                      "IsReadOnly": false,
+                      "IsOrdered": false,
+                      "IsUnique": false,
+                      "Multiplicity": "*",
+                      "TypeRef": "MDD4All.Person.DataModels.Person",
+                      "CollectionTypeRef": "System.Collections.Generic.List"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "PackagedElements": []
+        }
+      ],
+      "PackagedElements": []
+    }
+  ]
+}
